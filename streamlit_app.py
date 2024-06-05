@@ -1,5 +1,6 @@
 import streamlit as st
 import re
+import json
 import pandas as pd
 from janome.tokenizer import Tokenizer
 from collections import Counter
@@ -14,6 +15,13 @@ STOP_WORDS = set([
 
 # 英単語を検出するための正規表現パターン
 ENGLISH_WORD_PATTERN = re.compile(r'[a-zA-Z]+')
+
+#翻訳先の言語辞書を読み込み
+with open("languages.json") as f:
+    languages = json.load(f)
+
+lang_names = [language["name"] for language in languages]
+lang_dict = {language["name"]: language["language"] for language in languages}
 
 
 # PDFからテキストを抽出する関数
@@ -74,11 +82,14 @@ def translate_df(df, target_lang, api_key):
 # Streamlitアプリケーション
 st.set_page_config(layout="wide")  # ページレイアウトをワイドに設定
 
-st.title("PDFテキスト抽出と翻訳")
+st.title("PDF単語翻訳")
+st.subheader("PDF Word Translation")
 
 pdf_file = st.file_uploader("PDFファイルをアップロード", type="pdf")
 deepl_api_key = st.text_input("DeepL APIキー")
-target_lang = st.text_input("翻訳先の言語", value="EN")
+option = st.selectbox("翻訳先の言語を選択してください", lang_names, index=6)
+target_lang = "en-us"  #default language
+target_lang = lang_dict[option].lower()
 
 if st.button("実行"):
     if pdf_file is not None and deepl_api_key and target_lang:
@@ -91,10 +102,11 @@ if st.button("実行"):
         df["出現回数"] = df["単語"].map(word_freq)
         df = df.drop_duplicates(subset=["単語"]).sort_values(
             by="出現回数", ascending=False).reset_index(drop=True)
-
         translated_df = translate_df(df, target_lang, deepl_api_key)
-        
+        translated_df = translated_df.reindex(
+            columns=["出現回数", "単語", "ふりがな", "翻訳後", "品詞"])
+
         # テーブル表示を最大化
-        st.dataframe(translated_df, width=2000, height=1000)
+        st.dataframe(translated_df, hide_index=True, height=1000)
     else:
         st.error("すべての入力項目を正しく入力してください。")
