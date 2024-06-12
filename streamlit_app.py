@@ -115,7 +115,7 @@ if st.button("実行"):
             columns=["出現回数", "単語", "ふりがな", "翻訳後", "品詞"])
 
         # テーブル表示を最大化
-        st.dataframe(translated_df, hide_index=True, height=1000)
+        st.dataframe(translated_df, hide_index=True, height=1000, width=500)
     else:
         st.error(
             "Please make sure all fields are filled out correctly./すべての入力項目を正しく入力してください。"
