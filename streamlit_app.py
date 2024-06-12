@@ -99,7 +99,7 @@ option = st.selectbox(
 target_lang = "en-us"  #default language
 target_lang = lang_dict[option].lower()
 
-if st.button("実行"):
+if st.button("run/実行"):
     if pdf_file is not None and deepl_api_key and target_lang:
         text = extract_text_from_pdf(pdf_file)
         text = preprocess_text(text)
