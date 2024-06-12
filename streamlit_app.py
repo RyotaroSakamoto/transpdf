@@ -83,11 +83,19 @@ def translate_df(df, target_lang, api_key):
 st.set_page_config(layout="wide")  # ページレイアウトをワイドに設定
 
 st.title("PDF単語翻訳")
+st.write("Aggregate and translate PDF files written in Japanese word by word")
+st.write("日本語で書かれたPDFファイルを単語ごとに集計して翻訳します")
 st.subheader("PDF Word Translation")
+st.markdown(
+    "[Deepl APIkeyの取得方法](https://zenn.dev/eito_blog/articles/2e353b96a42494)")
 
-pdf_file = st.file_uploader("PDFファイルをアップロード", type="pdf")
-deepl_api_key = st.text_input("DeepL APIキー")
-option = st.selectbox("翻訳先の言語を選択してください", lang_names, index=6)
+pdf_file = st.file_uploader("Upload PDF file/PDFファイルをアップロード", type="pdf")
+deepl_api_key = st.text_input(
+    "Please enter your API key for DeepL/DeepL APIキーを入力してください")
+option = st.selectbox(
+    "Please select the language you wish to translate into/翻訳先の言語を選択してください",
+    lang_names,
+    index=6)
 target_lang = "en-us"  #default language
 target_lang = lang_dict[option].lower()
 
@@ -109,4 +117,6 @@ if st.button("実行"):
         # テーブル表示を最大化
         st.dataframe(translated_df, hide_index=True, height=1000)
     else:
-        st.error("すべての入力項目を正しく入力してください。")
+        st.error(
+            "Please make sure all fields are filled out correctly./すべての入力項目を正しく入力してください。"
+        )
