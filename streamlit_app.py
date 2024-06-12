@@ -87,7 +87,7 @@ st.write("Aggregate and translate PDF files written in Japanese word by word")
 st.write("日本語で書かれたPDFファイルを単語ごとに集計して翻訳します")
 st.subheader("PDF Word Translation")
 st.markdown(
-    "[Deepl APIkeyの取得方法](https://zenn.dev/eito_blog/articles/2e353b96a42494)")
+    "[How to get Deepl's API key/Deepl APIkeyの取得方法](https://zenn.dev/eito_blog/articles/2e353b96a42494)")
 
 pdf_file = st.file_uploader("Upload PDF file/PDFファイルをアップロード", type="pdf")
 deepl_api_key = st.text_input(
